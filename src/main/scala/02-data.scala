@@ -21,15 +21,8 @@ package enums:
    * 
    * Convert this "sealed trait" to an enum.
    */
-  sealed trait DayOfWeek
-  object DayOfWeek:
-    case object Sunday extends DayOfWeek
-    case object Monday extends DayOfWeek
-    case object Tuesday extends DayOfWeek
-    case object Wednesday extends DayOfWeek
-    case object Thursday extends DayOfWeek
-    case object Friday extends DayOfWeek
-    case object Saturday extends DayOfWeek
+  enum DayOfWeek:
+    case Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
   /**
    * EXERCISE 2
@@ -38,8 +31,8 @@ package enums:
    * this interop with Java enums by finding all values of `DayOfWeek`, and by finding the value 
    * corresponding to the string "Sunday".
    */
-  def daysOfWeek: Array[DayOfWeek] = ???
-  def sunday: DayOfWeek = ???
+  def daysOfWeek: Array[DayOfWeek] = DayOfWeek.values
+  def sunday: DayOfWeek = DayOfWeek.Sunday
 
   /**
    * EXERCISE 3
@@ -48,12 +41,18 @@ package enums:
    * 
    * Take special note of the inferred type of any of the case constructors!
    */
-  sealed trait Color 
-  object Color:
-    case object Red extends Color 
-    case object Green extends Color 
-    case object Blue extends Color
-    final case class Custom(red: Int, green: Int, blue: Int) extends Color
+  // sealed trait Color 
+  // object Color:
+  //   case object Red extends Color 
+  //   case object Green extends Color 
+  //   case object Blue extends Color
+  //   final case class Custom(red: Int, green: Int, blue: Int) extends Color
+  enum Color:
+    case Red
+    case Green
+    case Blue
+    final case class Custom(red: Int, green: Int, blue: Int)
+    // case Custom(red: Int, green: Int, blue: Int)
 
   /**
    * EXERCISE 4
@@ -66,6 +65,10 @@ package enums:
   object Result:
     final case class Succeed[Value](value: Value) extends Result[Nothing, Value]
     final case class Fail[Error](error: Error) extends Result[Error, Nothing]
+  // sealed trait Result[+Error, +Value]
+  // object Result:
+  //   final case class Succeed[Value](value: Value) extends Result[Nothing, Value]
+  //   final case class Fail[Error](error: Error) extends Result[Error, Nothing]
 
   /**
    * EXERCISE 5
@@ -100,11 +103,14 @@ package case_classes:
    * By making the public constructor private, make a smart constructor for `Email` so that only 
    * valid emails may be created.
    */
-  final case class Email(value: String)
+  final case class Email private (value: String)
   object Email:
-    def fromString(v: String): Option[Email] = ???
+    def fromString(v: String): Option[Email] = if isValidEmail(v) then Some(Email(v)) else None
 
     def isValidEmail(v: String): Boolean = v.matches("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$")
+
+    def apply(x: String) =
+      fromString(x).getOrElse(new Email("cant_do@email.com"))
 
   /**
    * EXERCISE 2
@@ -113,6 +119,7 @@ package case_classes:
    * 
    */
   def changeEmail(email: Email): Email = ???
+    // email.copy(v = "") // method copy cannot be accessed as a member of (email: Email)
 
   /**
    * EXERCISE 3
@@ -120,7 +127,8 @@ package case_classes:
    * Try to create an Email directly by using the generated constructor in the companion object.
    * 
    */
-  def caseClassApply(value: String): Email = ???
+  def caseClassApply(value: String): Email =
+    Email("default@gmail.com")
 
 /**
  * PATTERN MATCHING
@@ -137,6 +145,10 @@ object pattern_matching:
   //   list match 
   //     case (head : T) :: _ => Some(head)
   //     case _ => None 
+  def getT[T: scala.reflect.Typeable](list: List[Any]): Option[T] =
+    list match 
+      case (head : T) :: _ => Some(head)
+      case _ => None 
 
   val h :: t = ::("foo", Nil)
 
@@ -148,4 +160,4 @@ object pattern_matching:
    */
   for
     (l, r) <- Some((19, 42))
-  yield l + r
+  yield if l > 0 then l + r else l // ???
