@@ -38,7 +38,7 @@ object intersection_types:
    * Form the intersection of the types `HasLogging` and `HasUserRepo` by using the type 
    * intersection operator `&`.
    */
-  type HasLoggingAndUserRepo
+  type HasLoggingAndUserRepo = HasLogging & HasUserRepo
 
   /**
    * EXERCISE 2
@@ -46,7 +46,9 @@ object intersection_types:
    * Using the `IsEqual` helper method, test to see if the type `HasLogging & HasUserRepo` is the 
    * same as the type `HasUserRepo & HasLogging`.
    */
-  // IsEqual ...
+  // IsEqual
+  type HasUserRepoAndLogging = HasUserRepo & HasLogging
+  println(IsEqual)
 
   def IsEqual[A, B](using ev: A =:= B) = ()
 

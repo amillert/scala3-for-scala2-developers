@@ -13,7 +13,7 @@ object ext_methods:
    * Add an extension method to `Email` to retrieve the username of the email address (the part 
    * of the string before the `@` symbol).
    */
-  extension (e: Email) def username: String = e.value.split('@')(0)
+  extension (e: Email) def username: String = e.value.split('@')(0) // .head
 
   val sherlock = Email("sherlock@holmes.com").username
 
@@ -24,7 +24,7 @@ object ext_methods:
    * the string after the `@` symbol).
    */
   // extension
-  extension (e: Email) def serverAddress: String = e.value.split('@')(1)
+  extension (e: Email) def serverAddress: String = e.value.split('@')(1) // .last
 
   /**
    * EXERCISE 3

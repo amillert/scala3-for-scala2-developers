@@ -1,3 +1,4 @@
+import typeclass_basics.PrettyPrint
 /**
  * TYPECLASSES
  * 
@@ -24,28 +25,33 @@ object typeclass_basics:
    * data type `Person` that renders the person in a pretty way.
    */
   // given
+  given PrettyPrint[Person] with
+    extension (p: Person) def prettyPrint: String = p.toString
 
   /**
    * EXERCISE 2
    * 
-   * With the help of the `given` keyword, create a **named* instance of the `PrettyPrint` typeclass 
+   * With the help of the `given` keyword, create a *named* instance of the `PrettyPrint` typeclass 
    * for the data type `Int` that renders the integer in a pretty way.
    */
-  // given intPrettyPrint : ...
+  given PrettyPrint[Int] with
+    extension (i: Int) def prettyPrint: String = i.toString
 
   /**
    * EXERCISE 3
    * 
    * Using the `summon` function, summon an instance of `PrettyPrint` for `String`.
    */
-  val stringPrettyPrint: PrettyPrint[String] = ???
+  val stringPrettyPrint: PrettyPrint[String] =
+    summon[PrettyPrint[String]]
 
   /**
    * EXERCISE 4
    * 
    * Using the `summon` function, summon an instance of `PrettyPrint` for `Int`.
    */
-  val intPrettyPrint: PrettyPrint[Int] = ???
+  val intPrettyPrint: PrettyPrint[Int] =
+    summon[PrettyPrint[Int]]
 
   /**
    * EXERCISE 5
@@ -54,7 +60,8 @@ object typeclass_basics:
    * `A` for which a `PrettyPrint` instance exists, can both generate a pretty-print string, and 
    * print it out to the console using `println`.
    */
-  def prettyPrintIt = ???
+  def prettyPrintIt[A](a: A)(using PrettyPrint[A]) =
+    println(a.prettyPrint)
 
   /**
    * EXERCISE 6
@@ -91,14 +98,16 @@ object given_scopes:
      * 
      * Import the right given into the scope (but ONLY this given) so the following code will compile.
      */
-    // 12.hash 
+    import Hash.given_Hash_Int
+    12.hash
 
     /**
      * EXERCISE 2
      * 
      * Import the right given into the scope (but ONLY this given) so the following code will compile.
      */
-    // 12.123.hash   
+    import Hash.given_Hash_Double
+    12.123.hash
   }
 
   object more_typeclasses:
@@ -110,6 +119,7 @@ object given_scopes:
      * `enumerate` that returns a `List[A]`.
      */
     trait Enumerable[A]
+    //   extension def enumerable: List[A]
 
     object Enumerable:
       /**

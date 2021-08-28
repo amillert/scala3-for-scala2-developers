@@ -33,6 +33,7 @@ package enums:
    */
   def daysOfWeek: Array[DayOfWeek] = DayOfWeek.values
   def sunday: DayOfWeek = DayOfWeek.Sunday
+  // def sunday: DayOfWeek = DayOfWeek.valueOf("Sunday")
 
   /**
    * EXERCISE 3
@@ -48,11 +49,8 @@ package enums:
   //   case object Blue extends Color
   //   final case class Custom(red: Int, green: Int, blue: Int) extends Color
   enum Color:
-    case Red
-    case Green
-    case Blue
-    final case class Custom(red: Int, green: Int, blue: Int)
-    // case Custom(red: Int, green: Int, blue: Int)
+    case Red, Green, Blue
+    case Custom(red: Int, green: Int, blue: Int)
 
   /**
    * EXERCISE 4
@@ -61,14 +59,14 @@ package enums:
    * 
    * Take special note of the inferred type parameters in the case constructors!
    */
-  sealed trait Result[+Error, +Value]
-  object Result:
-    final case class Succeed[Value](value: Value) extends Result[Nothing, Value]
-    final case class Fail[Error](error: Error) extends Result[Error, Nothing]
   // sealed trait Result[+Error, +Value]
   // object Result:
   //   final case class Succeed[Value](value: Value) extends Result[Nothing, Value]
   //   final case class Fail[Error](error: Error) extends Result[Error, Nothing]
+
+  enum Result[+Error, +Value]:
+    case Succeed(value: Value) extends Result[Nothing, Value]
+    case Fail(error: Error) extends Result[Error, Nothing]
 
   /**
    * EXERCISE 5
@@ -77,19 +75,26 @@ package enums:
    * 
    * Take special note of the inferred type parameters in the case constructors!
    */
-  sealed trait Workflow[-Input, +Output]
-  object Workflow:
-    final case class End[Output](value: Output) extends Workflow[Any, Output]
+  // sealed trait Workflow[-Input, +Output]
+  // object Workflow:
+    // final case class End[Output](value: Output) extends Workflow[Any, Output]
+
+  enum Workflow[-Input, +Output]:
+    case End(value: Output) extends Workflow[Any, Output]
 
   /**
    * EXERCISE 6
    * 
    * Convert this "sealed trait" to an enum.
    */
-  sealed trait Conversion[-From, +To]
-  object Conversion:
-    case object AnyToString extends Conversion[Any, String]
-    case object StringToInt extends Conversion[String, Option[Int]]
+  // sealed trait Conversion[-From, +To]
+  // object Conversion:
+  //   case object AnyToString extends Conversion[Any, String]
+  //   case object StringToInt extends Conversion[String, Option[Int]]
+
+  enum Conversion[-From, +To]:
+    case AnyToString extends Conversion[Any, String]
+    case StringToInt extends Conversion[String, Option[Int]]
 
 /**
  * CASE CLASSES
