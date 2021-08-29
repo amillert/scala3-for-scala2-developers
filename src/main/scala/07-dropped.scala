@@ -26,7 +26,7 @@ object dropped:
    * 
    * Rewrite the following code to not rely on existential types.
    */
-  // def printFirst(x : List[A] forSome { type A }) = x.headOption.foreach(println(_))
+  def printFirst[A](x: List[A]) = x.headOption.foreach(println(_))
 
   /**
    * EXERCISE 3
@@ -43,6 +43,8 @@ object dropped:
    * Rewrite the do/while loop to an equivalent while loop.
    */
   var i = 0
+  while i <= 10 do
+    println("Hello!"); i = i + 1
   // do { println("Hello!"); i = i + 1; } while (i < 10)
 
   /**
@@ -51,6 +53,7 @@ object dropped:
    * Rewrite the following procedural method into an expression-oriented method.
    */
   // def runIt() { println("Running it!") }
+  val runIt = println("Running it!")
 
   /**
    * EXERCISE 6
@@ -65,6 +68,13 @@ object dropped:
 
   //   def isValidEmail(v: String): Boolean = v.matches("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$")
   // }
+  object email:
+    type Email = String
+
+    def makeEmail(s: String): Email = 
+      if (isValidEmail(s)) s else throw new IllegalStateException(s"${s} is not an email")
+
+    def isValidEmail(v: String): Boolean = v.matches("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$")
 
   /**
    * EXERCISE 7
@@ -75,10 +85,15 @@ object dropped:
   //   val key: String
   //   val hash = key.hashCode
   // }
+  abstract class MapEntry:
+    def key: String
+    def hash = key.hashCode
 
   // class IntMapEntry extends {
   //     val key = "Int"
   // } with MapEntry
+  class IntMapEntry extends MapEntry:
+    def key = "Int"
 
   /**
    * EXERCISE 8
@@ -157,8 +172,9 @@ object dropped:
   //
   //   def get(): Int = counter
   // }
-
+  class Counter(private var counter: Int = 0):
+    def increment(): Unit = counter += 1
   
-
+    def decrement(): Unit = counter -= 1 
   
-
+    def get(): Int = counter

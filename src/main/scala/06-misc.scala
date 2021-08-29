@@ -9,21 +9,21 @@ package top_level:
    * 
    * Define a top-level type alias for `List[String]` called `ListString`.
    */
-  type ListString 
+  type ListString = List[String]
 
   /**
    * EXERCISE 2
    * 
    * Define a top-level method called `helloWorld` which prints out "Hello World!".
    */
-  def helloWorld = ???
+  def helloWorld = println("Hello World!")
 
   /**
    * EXERCISE 3
    * 
    * Define a top-level variable called `pi` which is approximately equal to the value of pi.
    */
-  lazy val pi = ???
+  lazy val pi = 3.14159265359
 
 /**
  * TRAIT PARAMETERS
@@ -43,9 +43,10 @@ object trait_parameters:
    * Remove the field `console`, and instead, introduce a trait parameter.
    */
   trait Logging:
-    def console: Console
+    // def console: Console
 
-    def log(line: => String): Unit = console.print(line)
+    // def log(line: => String): Unit = console.print(line)
+    def log(line: => String): Unit = Console.print(line)
 
   /**
    * EXERCISE 2
@@ -140,7 +141,7 @@ object param_untupling:
    * Map over the "zipped" list of `numbers1` and `numbers2` using the 
    * `sum` function defined above.
    */
-  numbers1.zip(numbers2)
+  numbers1.zip(numbers2).map { sum(_, _) }
 
 /**
  * PROGRAMMATIC STRUCTURAL TYPES
@@ -171,7 +172,7 @@ object open_classes:
    * 
    * Add the keyword `open` to indicate this class is designed for extension.
    */
-  class BaseLogger:
+  open class BaseLogger:
     val logger: String => Unit = _ => ()
 
     def fine(line: String): Unit = logger(s"FINE: ${line}")
@@ -181,7 +182,7 @@ object open_classes:
    * 
    * Add the keyword `final` to indicate this class is not designed for extension.
    */
-  class ConsoleLogger extends BaseLogger:
+  final class ConsoleLogger extends BaseLogger:
     override val logger = println(_)
 
 /**
@@ -195,7 +196,7 @@ object infix:
       def and[A1 <: A](that: Predicate[A1]): Predicate[A1] = 
         Predicate(a1 => self.evaluate(a1) && that.evaluate(a1))
 
-      def or[A1 <: A](that: Predicate[A1]): Predicate[A1] = 
+      infix def or[A1 <: A](that: Predicate[A1]): Predicate[A1] = 
         Predicate(a1 => self.evaluate(a1) || that.evaluate(a1))
 
       def negate: Predicate[A] = Predicate(a => !evaluate(a))
@@ -209,5 +210,5 @@ object infix:
    * 
    * Make the following code compile by adding the `infix` keyword to the `or` operator.
    */
-  // val example = isGreaterThan(12) or isEqualTo(0)
+  val example = isGreaterThan(12) or isEqualTo(0)
 

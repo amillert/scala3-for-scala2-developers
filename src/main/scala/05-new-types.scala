@@ -86,7 +86,7 @@ object union_types:
    * Form the union of the types `PaymentDenied` and `MissingAddress` using the type union 
    * operator `|`.
    */
-  type PaymentDeniedOrMissingAddress
+  type PaymentDeniedOrMissingAddress = PaymentDenied | MissingAddress
 
   /**
    * EXERCISE 2
@@ -94,7 +94,7 @@ object union_types:
    * Create a value of type `PaymentDeniedOrMissingAddress` by assigning the following variable to 
    * a `PaymentDenied` error.
    */
-  val example1: PaymentDeniedOrMissingAddress = ???
+  val example1: PaymentDeniedOrMissingAddress = PaymentDenied("xd")
 
   /**
    * EXERCISE 3
@@ -102,7 +102,7 @@ object union_types:
    * Create a value of type `PaymentDeniedOrMissingAddress` by assigning the following variable to 
    * a `MissingAddress` error.
    */
-  val example2: PaymentDeniedOrMissingAddress = ???
+  val example2: PaymentDeniedOrMissingAddress = MissingAddress("xd")
 
   /**
    * EXERCISE 4
@@ -110,7 +110,9 @@ object union_types:
    * Perform a pattern match on `example2`, covering each possibility and printing out the 
    * error messages to the console.
    */
-  // example2 match 
+  example2 match
+    case PaymentDenied(x) => println(s"payment denied: $x")
+    case MissingAddress(x) => println(s"missing address: $x")
 
   /**
    * EXERCISE 5
@@ -118,7 +120,10 @@ object union_types:
    * Try to pattern match on `SomeList` and handle both cases. Explain 
    * your findings and what this implies about union types.
    */
-  def whatList(l: SomeList) = ???
+  // the type tst for List[?] cannot be checked at runtime
+  def whatList(l: SomeList) = ??? // l match
+    // case l: List[String] => "strings"
+    // case l: List[Int] => "ints"
 
   type SomeList = List[String] | List[Int]
 
